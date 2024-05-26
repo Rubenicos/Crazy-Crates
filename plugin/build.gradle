@@ -36,6 +36,7 @@ dependencies {
     compileOnly 'plus.crates:CratesPlus:5.0-SNAPSHOT-8'
     compileOnly 'com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.3.3-SNAPSHOT'
     compileOnly 'com.sainttx.holograms:holograms:2.12'
+    compileOnly 'com.github.decentsoftware-eu:decentholograms:2.8.8'
 
     implementation 'de.tr7zw:item-nbt-api:2.7.1'
 }

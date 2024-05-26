@@ -7,7 +7,8 @@ public enum Support {
     PLACEHOLDERAPI("PlaceholderAPI"),
     CRATESPLUS("CratesPlus"),
     HOLOGRAPHIC_DISPLAYS("HolographicDisplays"),
-    HOLOGRAMS("Holograms");
+    HOLOGRAMS("Holograms"),
+    DECENT_HOLOGRAMS("DecentHolograms");
     
     private String name;
     

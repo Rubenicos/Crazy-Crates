@@ -15,6 +15,7 @@ import me.badbones69.crazycrates.controllers.CrateControl;
 import me.badbones69.crazycrates.controllers.GUIMenu;
 import me.badbones69.crazycrates.controllers.Preview;
 import me.badbones69.crazycrates.cratetypes.*;
+import me.badbones69.crazycrates.multisupport.DecentHologramsSupport;
 import me.badbones69.crazycrates.multisupport.HologramsSupport;
 import me.badbones69.crazycrates.multisupport.HolographicSupport;
 import me.badbones69.crazycrates.multisupport.Support;
@@ -217,6 +218,8 @@ public class CrazyCrates {
             hologramController = new HolographicSupport();
         } else if (Support.HOLOGRAMS.isPluginLoaded()) {
             hologramController = new HologramsSupport();
+        } else if (Support.DECENT_HOLOGRAMS.isPluginLoaded()) {
+            hologramController = new DecentHologramsSupport();
         }
         //Removes all holograms so that they can be replaced.
         if (hologramController != null) {
@@ -682,7 +685,7 @@ public class CrazyCrates {
         if (location != null) {
             crateLocations.remove(location);
             if (hologramController != null) {
-                hologramController.removeHologram(location.getLocation().getBlock());
+                hologramController.removeHologram(location.getLocation().getBlock(), location.getCrate());
             }
         }
     }

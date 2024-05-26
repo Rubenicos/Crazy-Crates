@@ -134,7 +134,7 @@ public class QuadCrateSession {
             return false;
         }
         if (cc.getHologramController() != null) {
-            cc.getHologramController().removeHologram(spawnLocation.getBlock());
+            cc.getHologramController().removeHologram(spawnLocation.getBlock(), crate);
         }
         player.teleport(spawnLocation.clone().add(.5, 0, .5));
         //Shove other players away from the player
