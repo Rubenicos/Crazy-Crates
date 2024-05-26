@@ -5,7 +5,6 @@ import org.bukkit.Bukkit;
 public enum Support {
     
     PLACEHOLDERAPI("PlaceholderAPI"),
-    MVDWPLACEHOLDERAPI("MVdWPlaceholderAPI"),
     CRATESPLUS("CratesPlus"),
     HOLOGRAPHIC_DISPLAYS("HolographicDisplays"),
     HOLOGRAMS("Holograms");
