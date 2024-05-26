@@ -47,9 +47,11 @@ jar {
 }
 
 shadowJar {
+    archiveBaseName.set(rootProject.name)
     archiveClassifier.set('')
     exclude '*.schematic'
     exclude '*.nbt'
     relocate 'de.tr7zw.changeme.nbtapi', project.group + '.nbtapi'
+    destinationDirectory.set(file(rootProject.layout.buildDirectory.dir('libs')))
     minimize()
 }
