@@ -1,0 +1,55 @@
+plugins {
+    id 'com.github.johnrengelman.shadow'
+}
+
+processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    from(sourceSets.main.resources.srcDirs) {
+        include 'plugin.yml'
+        expand(rootProject.properties)
+    }
+}
+
+repositories {
+    maven { url 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+    maven { url 'https://repo.mvdw-software.be/content/groups/public/' }
+    maven { url 'https://repo.codemc.io/repository/maven-public/' }
+}
+
+dependencies {
+    implementation project(':v1_8_R3')
+    implementation project(':v1_9_R1')
+    implementation project(':v1_9_R2')
+    implementation project(':v1_10_R1')
+    implementation project(':v1_11_R1')
+    implementation project(':v1_12_R1')
+    implementation project(':v1_13_R2')
+    implementation project(':v1_14_R1')
+    implementation project(':v1_15_R1')
+    implementation project(':v1_16_R1')
+    implementation project(':v1_16_R2')
+    implementation project(':v1_16_R3')
+
+    compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
+
+    compileOnly 'me.clip:placeholderapi:2.10.0'
+    compileOnly 'plus.crates:CratesPlus:5.0-SNAPSHOT-8'
+    compileOnly 'com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.3.3-SNAPSHOT'
+    compileOnly 'com.sainttx.holograms:holograms:2.12'
+    compileOnly('be.maximvdw:MVdWPlaceholderAPI2.5.2-SNAPSHOT') { transitive = false }
+
+    implementation 'de.tr7zw:item-nbt-api:2.7.1'
+}
+
+jar {
+    enabled = false
+    dependsOn (shadowJar)
+}
+
+shadowJar {
+    archiveClassifier.set('')
+    exclude '*.schematic'
+    exclude '*.nbt'
+    relocate 'de.tr7zw.changeme.nbtapi', project.group + '.nbtapi'
+    minimize()
+}
