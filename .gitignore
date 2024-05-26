@@ -2,6 +2,10 @@
 **/target
 dependency-reduced-pom.xml
 
+# gradle
+.gradle/
+build/
+
 #IntelliJ
 .idea
 *.iml
