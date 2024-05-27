@@ -214,17 +214,19 @@ public class CrazyCrates {
         plugin = Bukkit.getPluginManager().getPlugin("CrazyCrates");
         quadCrateTimer = Files.CONFIG.getFile().getInt("Settings.QuadCrate.Timer") * 20;
         giveVirtualKeysWhenInventoryFull = Files.CONFIG.getFile().getBoolean("Settings.Give-Virtual-Keys-When-Inventory-Full");
-        if (Support.HOLOGRAPHIC_DISPLAYS.isPluginLoaded()) {
-            hologramController = new HolographicSupport();
-        } else if (Support.HOLOGRAMS.isPluginLoaded()) {
-            hologramController = new HologramsSupport();
-        } else if (Support.DECENT_HOLOGRAMS.isPluginLoaded()) {
-            hologramController = new DecentHologramsSupport();
-        }
-        //Removes all holograms so that they can be replaced.
-        if (hologramController != null) {
-            hologramController.removeAllHolograms();
-        }
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (Support.HOLOGRAPHIC_DISPLAYS.isPluginLoaded()) {
+                hologramController = new HolographicSupport();
+            } else if (Support.HOLOGRAMS.isPluginLoaded()) {
+                hologramController = new HologramsSupport();
+            } else if (Support.DECENT_HOLOGRAMS.isPluginLoaded()) {
+                hologramController = new DecentHologramsSupport();
+            }
+            //Removes all holograms so that they can be replaced.
+            if (hologramController != null) {
+                hologramController.removeAllHolograms();
+            }
+        }, 20L);
         if (fileManager.isLogging()) System.out.println(fileManager.getPrefix() + "Loading all crate information...");
         for (String crateName : fileManager.getAllCratesNames()) {
             //			if(fileManager.isLogging()) System.out.println(fileManager.getPrefix() + "Loading " + crateName + ".yml information....");
@@ -317,9 +319,11 @@ public class CrazyCrates {
                     Crate crate = getCrateFromName(locations.getString("Locations." + locationName + ".Crate"));
                     if (world != null && crate != null) {
                         crateLocations.add(new CrateLocation(locationName, crate, location));
-                        if (hologramController != null) {
-                            hologramController.createHologram(location.getBlock(), crate);
-                        }
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                            if (hologramController != null) {
+                                hologramController.createHologram(location.getBlock(), crate);
+                            }
+                        }, 30L);
                         loadedAmount++;
                     } else {
                         brokeLocations.add(new BrokeLocation(locationName, crate, x, y, z, worldName));
