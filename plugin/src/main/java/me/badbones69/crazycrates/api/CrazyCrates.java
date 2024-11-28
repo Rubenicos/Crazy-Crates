@@ -1,6 +1,6 @@
 package me.badbones69.crazycrates.api;
 
-import de.tr7zw.changeme.nbtapi.NBTItem;
+import com.saicone.rtag.RtagItem;
 import me.badbones69.crazycrates.Methods;
 import me.badbones69.crazycrates.api.FileManager.Files;
 import me.badbones69.crazycrates.api.enums.BrokeLocation;
@@ -1118,9 +1118,9 @@ public class CrazyCrates {
                 if (Methods.isSimilar(item, crate)) {
                     keys += item.getAmount();
                 } else {
-                    NBTItem nbtItem = new NBTItem(item);
-                    if (nbtItem.hasKey("CrazyCrates-Crate")) {
-                        if (crate.getName().equals(nbtItem.getString("CrazyCrates-Crate"))) {
+                    RtagItem tag = new RtagItem(item);
+                    if (tag.hasTag("CrazyCrates-Crate")) {
+                        if (crate.getName().equals(tag.get("CrazyCrates-Crate"))) {
                             keys += item.getAmount();
                         }
                     }
@@ -1378,7 +1378,7 @@ public class CrazyCrates {
         if (entity instanceof Item) {
             ItemStack item = ((Item) entity).getItemStack();
             if (item.getType() != Material.AIR) {
-                return new NBTItem(item).hasKey("crazycrates-item");
+                return new RtagItem(item).hasTag("crazycrates-item");
             }
         }
         return false;

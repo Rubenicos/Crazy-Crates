@@ -38,7 +38,8 @@ dependencies {
     compileOnly 'com.sainttx.holograms:holograms:2.12'
     compileOnly 'com.github.decentsoftware-eu:decentholograms:2.8.8'
 
-    implementation 'de.tr7zw:item-nbt-api:2.7.1'
+    implementation 'com.saicone.rtag:rtag:1.5.8'
+    implementation 'com.saicone.rtag:rtag-item:1.5.8'
 }
 
 jar {
@@ -51,7 +52,7 @@ shadowJar {
     archiveClassifier.set('')
     exclude '*.schematic'
     exclude '*.nbt'
-    relocate 'de.tr7zw.changeme.nbtapi', project.group + '.nbtapi'
+    relocate 'com.saicone.rtag', project.group + '.libs.rtag'
     destinationDirectory.set(file(rootProject.layout.buildDirectory.dir('libs')))
     minimize()
 }

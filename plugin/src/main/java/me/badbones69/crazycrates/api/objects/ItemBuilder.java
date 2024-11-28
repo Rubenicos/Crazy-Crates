@@ -1,6 +1,7 @@
 package me.badbones69.crazycrates.api.objects;
 
-import de.tr7zw.changeme.nbtapi.NBTItem;
+import com.saicone.rtag.RtagItem;
+import com.saicone.rtag.util.ServerInstance;
 import me.badbones69.crazycrates.Methods;
 import me.badbones69.crazycrates.api.CrazyCrates;
 import me.badbones69.crazycrates.multisupport.SkullCreator;
@@ -40,7 +41,7 @@ public class ItemBuilder {
     
     private static CrazyCrates cc = CrazyCrates.getInstance();
     private static Version version = Version.getCurrentVersion();
-    private NBTItem nbtItem;
+    private RtagItem rtagItem;
     private Material material;
     private int damage;
     private String name;
@@ -76,7 +77,7 @@ public class ItemBuilder {
      * The initial starting point for making an item.
      */
     public ItemBuilder() {
-        this.nbtItem = null;
+        this.rtagItem = null;
         this.material = Material.STONE;
         this.damage = 0;
         this.name = "";
@@ -110,7 +111,7 @@ public class ItemBuilder {
     }
     
     public ItemBuilder(ItemBuilder itemBuilder) {
-        this.nbtItem = itemBuilder.nbtItem;
+        this.rtagItem = itemBuilder.rtagItem;
         this.material = itemBuilder.material;
         this.damage = itemBuilder.damage;
         this.name = itemBuilder.name;
@@ -158,9 +159,9 @@ public class ItemBuilder {
             ItemMeta itemMeta = item.getItemMeta();
             itemBuilder.setName(itemMeta.getDisplayName())
             .setLore(itemMeta.getLore());
-            NBTItem nbt = new NBTItem(item);
-            if (nbt.hasKey("Unbreakable")) {
-                itemBuilder.setUnbreakable(nbt.getBoolean("Unbreakable"));
+            RtagItem tag = new RtagItem(item);
+            if (tag.hasTag("Unbreakable")) {
+                itemBuilder.setUnbreakable(tag.getOptional("Unbreakable").asBoolean(false));
             }
             if (version.isNewer(Version.v1_12_R1)) {
                 if (itemMeta instanceof org.bukkit.inventory.meta.Damageable) {
@@ -808,10 +809,10 @@ public class ItemBuilder {
         this.glowing = glowing;
         return this;
     }
-    
-    public NBTItem getNBTItem() {
-        nbtItem = new NBTItem(build());
-        return nbtItem;
+
+    public RtagItem getRtagItem() {
+        rtagItem = new RtagItem(build());
+        return rtagItem;
     }
     
     public List<ItemFlag> getItemFlags() {
@@ -856,8 +857,8 @@ public class ItemBuilder {
      * @return The result of all the info that was given to the builder as an ItemStack.
      */
     public ItemStack build() {
-        if (nbtItem != null) {
-            referenceItem = nbtItem.getItem();
+        if (rtagItem != null) {
+            referenceItem = rtagItem.loadCopy();
         }
         ItemStack item = referenceItem != null ? referenceItem : new ItemStack(material);
         if (item.getType() != Material.AIR) {
@@ -914,7 +915,7 @@ public class ItemBuilder {
                 banner.update();
                 shieldMeta.setBlockState(banner);
             }
-            if (useCustomModelData) {
+            if (useCustomModelData && ServerInstance.Release.FLAT) {
                 itemMeta.setCustomModelData(customModelData);
             }
             itemFlags.forEach(itemMeta :: addItemFlags);
@@ -922,32 +923,35 @@ public class ItemBuilder {
             hideFlags(item);
             item.addUnsafeEnchantments(enchantments);
             addGlow(item);
-            NBTItem nbt = new NBTItem(item);
+            RtagItem tag = new RtagItem(item);
+            if (useCustomModelData && ServerInstance.Release.LEGACY) {
+                tag.setCustomModelData(customModelData);
+            }
             if (isHead) {
                 if (!isHash && player != null && !player.equals("") && version.isNewer(Version.v1_8_R3)) {
-                    nbt.setString("SkullOwner", player);
+                    tag.set(player, "SkullOwner");
                 }
             }
             if (isMobEgg) {
                 if (entityType != null) {
-                    nbt.addCompound("EntityTag").setString("id", "minecraft:" + entityType.name());
+                    tag.set("minecraft:" + entityType.name(), "EntityTag", "id");
                 }
             }
             if (version.isOlder(Version.v1_11_R1)) {
                 if (unbreakable) {
-                    nbt.setBoolean("Unbreakable", true);
-                    nbt.setInteger("HideFlags", 4);
+                    tag.setUnbreakable(true);
+                    tag.set(4, "HideFlags");
                 }
             }
             if (!crateName.isEmpty()) {
-                nbt.setString("CrazyCrates-Crate", crateName);
+                tag.set(crateName, "CrazyCrates-Crate");
             }
-            return nbt.getItem();
+            return tag.loadCopy();
         } else {
             return item;
         }
     }
-    
+
     /**
      * Sets the converted item as a reference to try and save NBT tags and stuff.
      * @param referenceItem The item that is being referenced.

@@ -1,6 +1,6 @@
 package me.badbones69.crazycrates.cratetypes;
 
-import de.tr7zw.changeme.nbtapi.NBTItem;
+import com.saicone.rtag.RtagItem;
 import me.badbones69.crazycrates.Methods;
 import me.badbones69.crazycrates.api.CrazyCrates;
 import me.badbones69.crazycrates.api.enums.KeyType;
@@ -79,9 +79,9 @@ public class QuickCrate implements Listener {
             cc.givePrize(player, prize);
             Bukkit.getPluginManager().callEvent(new PlayerPrizeEvent(player, crate, crate.getName(), prize));
             ItemStack displayItem = prize.getDisplayItem();
-            NBTItem nbtItem = new NBTItem(displayItem);
-            nbtItem.setBoolean("crazycrates-item", true);
-            displayItem = nbtItem.getItem();
+            RtagItem tag = new RtagItem(displayItem);
+            tag.set(true, "crazycrates-item");
+            displayItem = tag.loadCopy();
             Item reward;
             try {
                 reward = player.getWorld().dropItem(loc.clone().add(.5, 1, .5), displayItem);

@@ -1,6 +1,6 @@
 package me.badbones69.crazycrates.controllers;
 
-import de.tr7zw.changeme.nbtapi.NBTItem;
+import com.saicone.rtag.RtagItem;
 import me.badbones69.crazycrates.Methods;
 import me.badbones69.crazycrates.api.CrazyCrates;
 import me.badbones69.crazycrates.api.FileManager.Files;
@@ -143,9 +143,9 @@ public class GUIMenu implements Listener {
                 if (e.getCurrentItem() != null) {
                     ItemStack item = e.getCurrentItem();
                     if (item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
-                        NBTItem nbtItem = new NBTItem(item);
-                        if (nbtItem.hasNBTData() && nbtItem.hasKey("CrazyCrates-Crate")) {
-                            Crate crate = cc.getCrateFromName(nbtItem.getString("CrazyCrates-Crate"));
+                        RtagItem tag = new RtagItem(item);
+                        if (tag.hasTag("CrazyCrates-Crate")) {
+                            Crate crate = cc.getCrateFromName(tag.get("CrazyCrates-Crate"));
                             if (crate != null) {
                                 if (e.getAction() == InventoryAction.PICKUP_HALF) {//Right clicked the item
                                     if (crate.isPreviewEnabled()) {

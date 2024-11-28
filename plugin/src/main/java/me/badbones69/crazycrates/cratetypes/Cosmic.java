@@ -1,6 +1,6 @@
 package me.badbones69.crazycrates.cratetypes;
 
-import de.tr7zw.changeme.nbtapi.NBTItem;
+import com.saicone.rtag.RtagItem;
 import me.badbones69.crazycrates.Methods;
 import me.badbones69.crazycrates.api.CrazyCrates;
 import me.badbones69.crazycrates.api.FileManager;
@@ -135,24 +135,22 @@ public class Cosmic implements Listener {
                         CosmicCrateManager manager = (CosmicCrateManager) crate.getManager();
                         int totalPrizes = manager.getTotalPrizes();
                         int pickedSlot = slot + 1;
-                        NBTItem nbtItem = new NBTItem(item);
-                        if (nbtItem.hasNBTData()) {
-                            if (nbtItem.hasKey("Cosmic-Mystery-Crate")) {
-                                if (!glass.containsKey(player)) glass.put(player, new ArrayList<>());
-                                if (glass.get(player).size() < totalPrizes) {
-                                    e.setCurrentItem(manager.getPickedCrate().setAmount(pickedSlot).addNamePlaceholder("%Slot%", pickedSlot + "").addLorePlaceholder("%Slot%", pickedSlot + "").build());
-                                    glass.get(player).add(slot);
-                                }
-                                player.playSound(player.getLocation(), cc.getSound("UI_BUTTON_CLICK", "CLICK"), 1, 1);
-                            } else if (nbtItem.hasKey("Cosmic-Picked-Crate")) {
-                                if (!glass.containsKey(player)) glass.put(player, new ArrayList<>());
-                                e.setCurrentItem(manager.getMysteryCrate().setAmount(pickedSlot).addNamePlaceholder("%Slot%", pickedSlot + "").addLorePlaceholder("%Slot%", pickedSlot + "").build());
-                                ArrayList<Integer> l = new ArrayList<>();
-                                for (int i : glass.get(player))
-                                    if (i != slot) l.add(i);
-                                glass.put(player, l);
-                                player.playSound(player.getLocation(), cc.getSound("UI_BUTTON_CLICK", "CLICK"), 1, 1);
+                        RtagItem tag = new RtagItem(item);
+                        if (tag.hasTag("Cosmic-Mystery-Crate")) {
+                            if (!glass.containsKey(player)) glass.put(player, new ArrayList<>());
+                            if (glass.get(player).size() < totalPrizes) {
+                                e.setCurrentItem(manager.getPickedCrate().setAmount(pickedSlot).addNamePlaceholder("%Slot%", pickedSlot + "").addLorePlaceholder("%Slot%", pickedSlot + "").build());
+                                glass.get(player).add(slot);
                             }
+                            player.playSound(player.getLocation(), cc.getSound("UI_BUTTON_CLICK", "CLICK"), 1, 1);
+                        } else if (tag.hasTag("Cosmic-Picked-Crate")) {
+                            if (!glass.containsKey(player)) glass.put(player, new ArrayList<>());
+                            e.setCurrentItem(manager.getMysteryCrate().setAmount(pickedSlot).addNamePlaceholder("%Slot%", pickedSlot + "").addLorePlaceholder("%Slot%", pickedSlot + "").build());
+                            ArrayList<Integer> l = new ArrayList<>();
+                            for (int i : glass.get(player))
+                                if (i != slot) l.add(i);
+                            glass.put(player, l);
+                            player.playSound(player.getLocation(), cc.getSound("UI_BUTTON_CLICK", "CLICK"), 1, 1);
                         }
                         if (glass.get(player).size() >= totalPrizes) {
                             KeyType keyType = cc.getPlayerKeyType(player);

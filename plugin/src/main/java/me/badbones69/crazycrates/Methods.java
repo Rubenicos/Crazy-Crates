@@ -1,6 +1,6 @@
 package me.badbones69.crazycrates;
 
-import de.tr7zw.changeme.nbtapi.NBTItem;
+import com.saicone.rtag.RtagItem;
 import me.badbones69.crazycrates.api.CrazyCrates;
 import me.badbones69.crazycrates.api.FileManager.Files;
 import me.badbones69.crazycrates.api.enums.Messages;
@@ -210,13 +210,11 @@ public class Methods {
     
     private static ItemStack stripNBT(ItemStack item) {
         try {
-            NBTItem nbtItem = new NBTItem(item.clone());
-            if (nbtItem.hasNBTData()) {
-                if (nbtItem.hasKey("CrazyCrates-Crate")) {
-                    nbtItem.removeKey("CrazyCrates-Crate");
-                }
+            RtagItem tag = new RtagItem(item);
+            if (tag.hasTag("CrazyCrates-Crate")) {
+                tag.remove("CrazyCrates-Crate");
             }
-            return nbtItem.getItem();
+            return tag.loadCopy();
         } catch (Exception e) {
             return item;
         }

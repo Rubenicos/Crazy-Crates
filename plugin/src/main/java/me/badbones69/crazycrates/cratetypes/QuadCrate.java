@@ -1,6 +1,6 @@
 package me.badbones69.crazycrates.cratetypes;
 
-import de.tr7zw.changeme.nbtapi.NBTItem;
+import com.saicone.rtag.RtagItem;
 import me.badbones69.crazycrates.api.CrazyCrates;
 import me.badbones69.crazycrates.api.enums.Messages;
 import me.badbones69.crazycrates.api.objects.Crate;
@@ -61,9 +61,9 @@ public class QuadCrate implements Listener {
                         ItemBuilder itemBuilder = ItemBuilder.convertItemStack(prize.getDisplayItem());
                         itemBuilder.addLore(new Random().nextInt(Integer.MAX_VALUE) + "");//Makes sure items don't merge
                         ItemStack item = itemBuilder.build();
-                        NBTItem nbtItem = new NBTItem(item);
-                        nbtItem.setBoolean("crazycrates-item", true);
-                        item = nbtItem.getItem();
+                        RtagItem tag = new RtagItem(item);
+                        tag.set(true, "crazycrates-item");
+                        item = tag.load();
                         Item reward = player.getWorld().dropItem(block.getLocation().add(.5, 1, .5), item);
                         reward.setMetadata("betterdrops_ignore", new FixedMetadataValue(cc.getPlugin(), true));
                         reward.setVelocity(new Vector(0, .2, 0));

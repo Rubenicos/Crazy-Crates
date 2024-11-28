@@ -1,6 +1,6 @@
 package me.badbones69.crazycrates.api.objects;
 
-import de.tr7zw.changeme.nbtapi.NBTItem;
+import com.saicone.rtag.RtagItem;
 import me.badbones69.crazycrates.Methods;
 import me.badbones69.crazycrates.api.CrazyCrates;
 import me.badbones69.crazycrates.api.FileManager;
@@ -444,9 +444,9 @@ public class Crate {
     
     public Prize getPrize(ItemStack item) {
         try {
-            NBTItem nbt = new NBTItem(item);
-            if (nbt.hasKey("crazycrate-prize")) {
-                return getPrize(nbt.getString("crazycrate-prize"));
+            RtagItem tag = new RtagItem(item);
+            if (tag.hasTag("crazycrate-prize")) {
+                return getPrize(tag.getOptional("crazycrate-prize").asString());
             }
         } catch (Exception e) {
         }
@@ -488,11 +488,9 @@ public class Crate {
                 if (item.getItemMeta().hasDisplayName()) file.set(path + ".DisplayName", item.getItemMeta().getDisplayName());
                 if (item.getItemMeta().hasLore()) file.set(path + ".Lore", item.getItemMeta().getLore());
             }
-            NBTItem nbtItem = new NBTItem(item);
-            if (nbtItem.hasNBTData()) {
-                if (nbtItem.hasKey("Unbreakable") && nbtItem.getBoolean("Unbreakable")) {
-                    file.set(path + ".Unbreakable", true);
-                }
+            RtagItem tag = new RtagItem(item);
+            if (tag.isUnbreakable()) {
+                file.set(path + ".Unbreakable", true);
             }
             List<String> enchantments = new ArrayList<>();
             for (Enchantment enchantment : item.getEnchantments().keySet()) {
