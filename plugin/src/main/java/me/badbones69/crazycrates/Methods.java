@@ -160,11 +160,17 @@ public class Methods {
         }
         return check;
     }
+
+    public static String getCrateName(ItemStack itemStack) {
+        if (itemStack == null || itemStack.getType() == Material.AIR) {
+            return null;
+        }
+        return new RtagItem(itemStack).get("CrazyCrates-Crate");
+    }
     
     public static boolean isSimilar(ItemStack itemStack, Crate crate) {
-        return itemStack.isSimilar(crate.getKey()) || itemStack.isSimilar(crate.getKeyNoNBT()) ||
-        itemStack.isSimilar(crate.getAdminKey()) || stripNBT(itemStack).isSimilar(crate.getKeyNoNBT()) ||
-        isSimilarCustom(crate.getKeyNoNBT(), itemStack);
+        final String name = getCrateName(itemStack);
+        return name != null && name.equals(crate.getName());
     }
     
     private static boolean isSimilarCustom(ItemStack one, ItemStack two) {

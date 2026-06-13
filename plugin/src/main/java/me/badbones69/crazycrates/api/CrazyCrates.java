@@ -955,14 +955,9 @@ public class CrazyCrates {
      * @return Returns a Crate if is a key from a crate otherwise null if it is not.
      */
     public Crate getCrateFromKey(ItemStack item) {
-        if (item != null && item.getType() != Material.AIR) {
-            for (Crate crate : getCrates()) {
-                if (crate.getCrateType() != CrateType.MENU) {
-                    if (isKeyFromCrate(item, crate)) {
-                        return crate;
-                    }
-                }
-            }
+        final String name = Methods.getCrateName(item);
+        if (name != null) {
+            return getCrateFromName(name);
         }
         return null;
     }
@@ -975,9 +970,7 @@ public class CrazyCrates {
      */
     public boolean isKeyFromCrate(ItemStack item, Crate crate) {
         if (crate.getCrateType() != CrateType.MENU) {
-            if (item != null && item.getType() != Material.AIR) {
-                return Methods.isSimilar(item, crate);
-            }
+            return Methods.isSimilar(item, crate);
         }
         return false;
     }
