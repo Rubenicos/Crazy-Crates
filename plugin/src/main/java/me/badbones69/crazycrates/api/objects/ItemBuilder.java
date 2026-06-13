@@ -311,11 +311,20 @@ public class ItemBuilder {
                 this.armorColor = getColor(metaData);
             }
         } else if (material.contains("#")) {
-            String[] b = material.split("#");
-            material = b[0];
-            if (Methods.isInt(b[1])) {//Value is a number.
+            String[] split = material.split("#");
+            material = split[0];
+            if (Methods.isInt(split[1])) { // Value is a number.
                 this.useCustomModelData = true;
-                this.customModelData = Integer.parseInt(b[1]);
+                this.customModelData = Integer.parseInt(split[1]);
+                if (split.length > 2) {
+                    this.potionType = getPotionType(PotionEffectType.getByName(split[2]));
+                    this.potionColor = getColor(split[2]);
+                    this.armorColor = getColor(split[2]);
+                }
+            } else { // Value is something else.
+                this.potionType = getPotionType(PotionEffectType.getByName(split[1]));
+                this.potionColor = getColor(split[1]);
+                this.armorColor = getColor(split[1]);
             }
         }
         Material m = Material.matchMaterial(material);
@@ -1072,6 +1081,10 @@ public class ItemBuilder {
                     return Color.WHITE;
                 case "YELLOW":
                     return Color.YELLOW;
+            }
+            if (color.length() == 6) {
+                int rgb = (int) Long.parseLong(color, 16);
+                return Color.fromRGB(rgb);
             }
             try {
                 String[] rgb = color.split(",");
